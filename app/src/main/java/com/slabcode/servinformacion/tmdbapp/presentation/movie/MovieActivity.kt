@@ -3,6 +3,9 @@ package com.slabcode.servinformacion.tmdbapp.presentation.movie
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,5 +37,36 @@ class MovieActivity : AppCompatActivity() {
         liveDataResponse.observe(this, Observer {
             Log.d("MoviesResult", it.toString())
         })
+    }
+
+    /**
+     * To show the menu action
+     */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.update, menu)
+        return true
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_update -> {
+                updateMovies()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * To update the movies list, it will call the api again and delete and save to the db
+     */
+    private fun updateMovies() {
+        val response = viewModel.updateMovies()
+        response.observe(this, Observer {
+            Log.d("MoviesResult", it.toString())
+        })
+
     }
 }
